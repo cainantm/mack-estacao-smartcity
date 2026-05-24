@@ -122,7 +122,7 @@ void loop() {
   unsigned int peakToPeak = maxLeitura - minLeitura;
   float volts = (peakToPeak * 3.3) / 4095.0; 
   float ruidoDB = 20.0 * log10(volts + 0.001) + 65.0; 
-  if (ruidoDB < 45.0) ruidoDB = 45.0;
+  if (ruidoDB < 30.0) ruidoDB = 30.0;
   if (ruidoDB > 95.0) ruidoDB = 95.0;
 
   sds.read();
