@@ -90,15 +90,13 @@ void loop() {
     Serial.println("\n[OK] Wi-Fi reestabelecido!");
   }
 
-  if (!io.connected()) {
+  if (io.status() != AIO_CONNECTED) {
     Serial.println("Conectando ao Adafruit IO via MQTT...");
     
     int8_t erro;
-    while ((erro = io.connect()) != 0) {
+    while ((erro = io.status()) != AIO_CONNECTED) {
       Serial.print("Erro MQTT: ");
-      Serial.println(io.connectErrorString(erro));
-      Serial.println("Tentando novamente em 5 segundos...");
-      mqtt.disconnect();
+      Serial.print(erro);
       delay(5000);
     }
     
