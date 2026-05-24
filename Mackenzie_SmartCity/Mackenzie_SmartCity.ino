@@ -77,6 +77,32 @@ void loop() {
 
   // Garante a reconexão se cair
   if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Critico: Wi-Fi desconectado! Iniciando recuperação...");
+  
+    // 1. Força a reconexão do Wi-Fi
+    WiFi.disconnect();
+    WiFi.reconnect();
+    
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+    }
+    Serial.println("\n[OK] Wi-Fi reestabelecido!");
+  }
+
+  if (!io.connected()) {
+    Serial.println("Conectando ao Adafruit IO via MQTT...");
+    
+    int8_t erro;
+    while ((erro = io.connect()) != 0) {
+      Serial.print("Erro MQTT: ");
+      Serial.println(io.connectErrorString(erro));
+      Serial.println("Tentando novamente em 5 segundos...");
+      mqtt.disconnect();
+      delay(5000);
+    }
+    
+    Serial.println("[OK] Adafruit IO conectado com sucesso!");
   }
 
   Serial.println("\n=== [LEITURA LOCAL] Nova Amostragem dos Sensores ===");
